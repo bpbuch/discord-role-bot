@@ -2,6 +2,10 @@
 
 A bot that assigns roles based on reactions using the discord.js module.
 
+## Demo
+
+![role bot demo](https://media.giphy.com/media/hu0TaQU0XzbGM0ZuiT/source.gif)
+
 ## Prerequisite
 
 ### Install Node.js
