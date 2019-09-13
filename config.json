@@ -1,8 +1,8 @@
 {
-  "channel": "roles",
+  "channel": "lfg-roles",
   "roles": {
     "xbox": "Xbox",
     "ps4": "PS4",
-    "Steam": "Steam"
+    "steam": "Steam"
   }
 }

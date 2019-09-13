@@ -23,10 +23,17 @@ client.login(process.env.BOT_TOKEN);
 async function onReady() {
   const channel = client.channels.find((channel) => channel.name === config.channel);
 
-  // channel will not contain messages after found
-  await channel.messages.fetch();
+  // channel will not contain messages after it is found
+  try {
+    await channel.messages.fetch();
+  } catch (err) {
+    console.error('Error fetching channel messages', err);
+    return;
+  }
 
   config.message_id = channel.messages.first().id;
+
+  console.log(`Watching message '${config.message_id}' for reactions...`)
 }
 
 /**
@@ -43,15 +50,30 @@ async function addRole({message, _emoji}, user) {
   // fetch the information to ensure everything is available
   // https://github.com/discordjs/discord.js/blob/master/docs/topics/partials.md
   if (message.partial) {
-    await message.fetch();
+    try {
+      await message.fetch();
+    } catch (err) {
+      console.error('Error fetching message', err);
+      return;
+    }
   }
 
   const { guild } = message;
 
   const member = guild.members.get(user.id);
   const role = guild.roles.find((role) => role.name === config.roles[_emoji.name]);
+
+  if (!role) {
+    console.error(`Role not found for '${_emoji.name}'`);
+    return;
+  }
   
-  member.roles.add(role.id);
+  try {
+    member.roles.add(role.id);
+  } catch (err) {
+    console.error('Error adding role', err);
+    return;
+  }
 }
 
 /**
@@ -68,7 +90,12 @@ async function removeRole({message, _emoji}, user) {
   // fetch the information to ensure everything is available
   // https://github.com/discordjs/discord.js/blob/master/docs/topics/partials.md
   if (message.partial) {
-    await message.fetch();
+    try {
+      await message.fetch();
+    } catch (err) {
+      console.error('Error fetching message', err);
+      return;
+    }
   }
 
   const { guild } = message;
@@ -76,5 +103,15 @@ async function removeRole({message, _emoji}, user) {
   const member = guild.members.get(user.id);
   const role = guild.roles.find((role) => role.name === config.roles[_emoji.name]);
 
-  member.roles.remove(role.id);
+  if (!role) {
+    console.error(`Role not found for '${_emoji.name}'`);
+    return;
+  }
+
+  try{
+    member.roles.remove(role.id);
+  } catch (err) {
+    console.error('Error removing role', err);
+    return;
+  }
 }
