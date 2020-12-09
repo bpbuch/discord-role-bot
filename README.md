@@ -29,6 +29,7 @@ A bot that assigns roles based on reactions using the discord.js module.
 
 1. clone this repository
 2. install dependencies with: `npm install`
+or if you have GitBash type: `git clone <The link>`
 
 ## Configure
 
